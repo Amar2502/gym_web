@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { getWhatsAppUrl, petersGym } from "@/content/peters-gym";
+import { HeroBackground } from "./HeroBackground";
 import { Reveal } from "./Reveal";
 
 const { hero } = petersGym;
@@ -11,16 +11,7 @@ export function Hero() {
       className="relative flex min-h-svh items-center justify-center overflow-hidden noise-overlay"
       aria-label="Hero"
     >
-      <Image
-        src={hero.backgroundImage}
-        alt="Peters Gym interior — heavy training floor"
-        fill
-        priority
-        className="object-cover"
-        sizes="100vw"
-      />
-      <div className="absolute inset-0 bg-linear-to-b from-background/70 via-background/50 to-background" />
-      <div className="absolute inset-0 bg-accent/5 mix-blend-overlay" />
+      <HeroBackground />
 
       <div className="relative z-10 mx-auto max-w-5xl px-6 py-32 text-center lg:px-8">
         <Reveal>

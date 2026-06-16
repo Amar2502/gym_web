@@ -31,7 +31,7 @@ const infoCards = [
 export function Contact() {
   return (
     <section id="contact" className="relative py-24 lg:py-32 mesh-bg" aria-labelledby="contact-heading">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-accent/40 to-transparent" />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <Reveal>

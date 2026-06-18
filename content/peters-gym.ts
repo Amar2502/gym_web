@@ -36,7 +36,6 @@ export type PetersGymConfig = {
   site: {
     name: string;
     displayName: string;
-    logo: string;
     tagline: string;
     description: string;
     location: string;
@@ -114,30 +113,29 @@ export type PetersGymConfig = {
 
 export const petersGym: PetersGymConfig = {
   site: {
-    name: "PETERS GYM",
-    displayName: "Peters Gym",
-    logo: "/images/logo.jpg",
+    name: "Iron House Gym",
+    displayName: "Iron House Gym",
     tagline: "Mumbai's Premier Bodybuilding Gym",
     description:
       "Hardcore strength training and bodybuilding coaching in the heart of Mumbai — built by champions, for champions.",
     location: "Motilal Nagar I, Near Oshiwara Bus Depot",
     address: "Motilal Nagar I, Near Oshiwara Bus Depot",
     city: "Mumbai, Maharashtra",
-    phone: "+91 9372721108",
-    whatsapp: "919372721108",
-    whatsappMessage: "Hi, I'd like to join Peters Gym. Please share membership details.",
-    instagram: "https://instagram.com/petersgymmumbai",
-    facebook: "https://facebook.com/petersgymmumbai",
+    phone: "+91 8291613471",
+    whatsapp: "918291613471",
+    whatsappMessage: "Hi, I'd like to join Iron House Gym. Please share membership details.",
+    instagram: "https://instagram.com/ironhousegymmumbai",
+    facebook: "https://facebook.com/ironhousegymmumbai",
     hours: [
       { day: "Mon – Sat", time: "5:00 AM – 11:00 PM" },
       { day: "Sunday", time: "6:00 AM – 9:00 PM" },
     ],
   },
   metadata: {
-    title: "Peters Gym — Mumbai's Premier Bodybuilding Gym",
+    title: "Iron House Gym — Mumbai's Premier Bodybuilding Gym",
     description:
-      "Train at Peters Gym in Oshiwara, Mumbai. Founded by 2x Mr. India Vipin Peters. Hardcore bodybuilding, strength training, and personal coaching.",
-    ogTitle: "Peters Gym — Where Champions Are Forged",
+      "Train at Iron House Gym in Oshiwara, Mumbai. Founded by 2x Mr. India Josh Stanner. Hardcore bodybuilding, strength training, and personal coaching.",
+    ogTitle: "Iron House Gym — Where Champions Are Forged",
     ogDescription:
       "Mumbai's premier bodybuilding gym. Strength training, coaching, and nutrition guidance under champion-level leadership.",
   },
@@ -151,7 +149,7 @@ export const petersGym: PetersGymConfig = {
   ],
   hero: {
     backgroundImage: "/images/hero-bg.svg",
-    headline: "PETERS GYM",
+    headline: "Iron House Gym",
     tagline: "Discipline builds muscle. Excuses build nothing.",
     primaryCta: { label: "Join Now", href: "#whatsapp" },
     secondaryCta: { label: "View Programs", href: "#programs" },
@@ -162,7 +160,7 @@ export const petersGym: PetersGymConfig = {
     ],
   },
   founder: {
-    name: "Vipin Peters",
+    name: "Josh Stanner",
     image: "/images/founder.jpg",
     titles: [
       "2x Mr. India",
@@ -172,9 +170,9 @@ export const petersGym: PetersGymConfig = {
       "Champion of Champions",
       "IFBB Athlete",
     ],
-    bio: "Vipin Peters has spent decades at the pinnacle of competitive bodybuilding — representing India on the world stage and dominating national and inter-services championships. His training philosophy is forged in the trenches of elite competition.",
+    bio: "Josh Stanner has spent decades at the pinnacle of competitive bodybuilding — representing India on the world stage and dominating national and inter-services championships. His training philosophy is forged in the trenches of elite competition.",
     philosophy:
-      "Peters Gym exists for one reason: to give serious lifters the environment, equipment, and coaching they need to build real muscle and real strength. No gimmicks. No shortcuts. Just iron, discipline, and results.",
+      "Iron House Gym exists for one reason: to give serious lifters the environment, equipment, and coaching they need to build real muscle and real strength. No gimmicks. No shortcuts. Just iron, discipline, and results.",
   },
   programs: {
     label: "Programs & Services",
@@ -242,7 +240,7 @@ export const petersGym: PetersGymConfig = {
         featured: false,
         cta: "Join Monthly",
         whatsappMessage:
-          "Hi, I'd like to join Peters Gym on the Monthly plan (₹2,000/month). Please share details.",
+          "Hi, I'd like to join Iron House Gym on the Monthly plan (₹2,000/month). Please share details.",
       },
       {
         name: "Quarterly",
@@ -259,7 +257,7 @@ export const petersGym: PetersGymConfig = {
         featured: true,
         cta: "Join Quarterly",
         whatsappMessage:
-          "Hi, I'd like to join Peters Gym on the Quarterly plan (₹5,000/quarter). Please share details.",
+          "Hi, I'd like to join Iron House Gym on the Quarterly plan (₹5,000/quarter). Please share details.",
       },
       {
         name: "Yearly",
@@ -276,7 +274,7 @@ export const petersGym: PetersGymConfig = {
         featured: false,
         cta: "Join Yearly",
         whatsappMessage:
-          "Hi, I'd like to join Peters Gym on the Yearly plan (₹18,000/year). Please share details.",
+          "Hi, I'd like to join Iron House Gym on the Yearly plan (₹18,000/year). Please share details.",
       },
     ],
   },
@@ -284,12 +282,10 @@ export const petersGym: PetersGymConfig = {
     label: "Gallery",
     title: "The iron speaks for itself.",
     description:
-      "Heavy racks, hard training, and real transformations — this is what Peters Gym looks like.",
+      "Heavy racks, hard training, and real transformations — this is what Iron House Gym looks like.",
     images: [
       { src: "/images/gallery-1.jpg", alt: "Free weight training area" },
-      // { src: "/images/gallery-2.svg", alt: "Power rack and barbell zone" },
       { src: "/images/gallery-3.jpg", alt: "Dumbbell section" },
-      // { src: "/images/gallery-4.svg", alt: "Member training session" },
       { src: "/images/gallery-5.jpg", alt: "Leg day in progress" },
       { src: "/images/gallery-6.jpg", alt: "Back and shoulders workout" },
       { src: "/images/gallery-7.jpg", alt: "Cardio section" },
@@ -303,14 +299,14 @@ export const petersGym: PetersGymConfig = {
       {
         name: "Rahul Sharma",
         quote:
-          "I've trained at a dozen gyms in Mumbai. Peters Gym is the only place that feels like a real bodybuilding gym — heavy iron, no nonsense, and coaches who actually know what they're doing.",
+          "I've trained at a dozen gyms in Mumbai. Iron House Gym is the only place that feels like a real bodybuilding gym — heavy iron, no nonsense, and coaches who actually know what they're doing.",
         detail: "Member · 14 months",
         image: "/images/testimonial-1.svg",
       },
       {
         name: "Amit Desai",
         quote:
-          "Under Vipin sir's guidance I added 8 kg of lean mass in six months. The programming is brutal but effective — exactly what I needed to prep for my first physique show.",
+          "Under Josh sir's guidance I added 8 kg of lean mass in six months. The programming is brutal but effective — exactly what I needed to prep for my first physique show.",
         detail: "Bodybuilding coaching",
         image: "/images/testimonial-2.svg",
       },
@@ -340,7 +336,7 @@ export const petersGym: PetersGymConfig = {
   },
   footer: {
     tagline: "Forged in discipline. Built in iron.",
-    copyright: "Peters Gym. All rights reserved.",
+    copyright: "Iron House Gym. All rights reserved.",
   },
 };
 

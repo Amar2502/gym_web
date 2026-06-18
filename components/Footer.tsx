@@ -1,5 +1,4 @@
 import { getWhatsAppUrl, petersGym } from "@/content/peters-gym";
-import { LogoMark } from "./ui";
 
 const { site, nav, footer } = petersGym;
 
@@ -10,7 +9,6 @@ export function Footer() {
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <a href="#" className="flex items-center gap-3">
-              <LogoMark className="h-10 w-10" />
               <div>
                 <span className="font-display text-3xl uppercase tracking-wider">
                   {site.displayName}

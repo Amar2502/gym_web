@@ -2,19 +2,6 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import { petersGym } from "@/content/peters-gym";
 
-export function LogoMark({ className = "w-8 h-8" }: { className?: string }) {
-  return (
-    <Image
-      src={petersGym.site.logo}
-      alt={`${petersGym.site.displayName} logo`}
-      width={40}
-      height={40}
-      className={`${className} object-contain`}
-      priority
-    />
-  );
-}
-
 export function SectionHeader({
   label,
   title,

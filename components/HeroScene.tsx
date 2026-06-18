@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { ContactShadows, Grid } from "@react-three/drei";
+import { Grid } from "@react-three/drei";
 import type { Group } from "three";
 import * as THREE from "three";
 
@@ -92,12 +92,12 @@ function WeightPlate({
   return (
     <group rotation={[0, 0, Math.PI / 2]}>
       {/* Outer rim */}
-      <mesh castShadow>
+      <mesh>
         <cylinderGeometry args={[radius, radius, thickness * 0.5, segments]} />
         {mat}
       </mesh>
       {/* Inner face */}
-      <mesh castShadow>
+      <mesh>
         <cylinderGeometry args={[radius * 0.88, radius * 0.88, thickness, segments]} />
         {mat}
       </mesh>
@@ -140,20 +140,20 @@ function Barbell({
   return (
     <group position={position} scale={scale} rotation={[0.012, 0.04, 0]}>
       {/* Shaft */}
-      <mesh castShadow rotation={[0, 0, Math.PI / 2]}>
+      <mesh rotation={[0, 0, Math.PI / 2]}>
         <cylinderGeometry args={[0.044, 0.044, 3.0, seg]} />
         <SteelMat bright />
       </mesh>
       {/* Knurling bands */}
       {[-0.55, -0.35, -0.15, 0.15, 0.35, 0.55].map((kx) => (
-        <mesh key={kx} position={[kx, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
+        <mesh key={kx} position={[kx, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
           <cylinderGeometry args={[0.048, 0.048, 0.04, seg]} />
           <meshStandardMaterial color={STEEL_DK} metalness={0.9} roughness={0.35} />
         </mesh>
       ))}
       {/* Sleeves */}
       {([-1.22, 1.22] as number[]).map((sx) => (
-        <mesh key={sx} position={[sx, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
+        <mesh key={sx} position={[sx, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
           <cylinderGeometry args={[0.056, 0.056, 0.38, seg]} />
           <SteelMat />
         </mesh>
@@ -166,7 +166,7 @@ function Barbell({
       ))}
       {/* Collars */}
       {([-1.5, 1.5] as number[]).map((cx) => (
-        <mesh key={cx} position={[cx, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
+        <mesh key={cx} position={[cx, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
           <cylinderGeometry args={[0.068, 0.068, 0.1, 20]} />
           <meshStandardMaterial color={STEEL_DK} metalness={0.88} roughness={0.3} />
         </mesh>
@@ -187,7 +187,7 @@ function Dumbbell({
   return (
     <group position={position} rotation={rotation} scale={scale}>
       {/* Handle */}
-      <mesh castShadow rotation={[0, 0, Math.PI / 2]}>
+      <mesh rotation={[0, 0, Math.PI / 2]}>
         <cylinderGeometry args={[0.032, 0.032, 0.34, seg]} />
         <SteelMat bright />
       </mesh>
@@ -216,9 +216,11 @@ const FLOOR_Y = -1.18;
 function GymEquipment({
   reduced,
   mobile,
+  isVisible,
 }: {
   reduced: boolean;
   mobile: boolean;
+  isVisible: boolean;
 }) {
   const groupRef = useRef<Group>(null);
   const tRef = useRef(0);
@@ -237,7 +239,7 @@ function GymEquipment({
   }, [mobile, reduced, onPointer]);
 
   useFrame((_, delta) => {
-    if (!groupRef.current) return;
+    if (!isVisible || !groupRef.current) return;
     tRef.current += delta;
     if (mobile || reduced) {
       groupRef.current.rotation.y = Math.sin(tRef.current * 0.16) * 0.035;
@@ -329,12 +331,81 @@ function GymEquipment({
   );
 }
 
+// ─── Fake ground shadows (replaces real-time shadow maps) ─────────────────────
+const shadowTexture = (() => {
+  if (typeof document === "undefined") return null;
+  const canvas = document.createElement("canvas");
+  canvas.width = 128;
+  canvas.height = 128;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+  const gradient = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+  gradient.addColorStop(0, "rgba(0,0,0,0.6)");
+  gradient.addColorStop(0.45, "rgba(0,0,0,0.22)");
+  gradient.addColorStop(1, "rgba(0,0,0,0)");
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 128, 128);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+})();
+
+function FakeShadow({
+  position,
+  scale = [1.4, 1.4] as [number, number],
+  opacity = 0.42,
+}: {
+  position: [number, number, number];
+  scale?: [number, number];
+  opacity?: number;
+}) {
+  const map = shadowTexture;
+  if (!map) return null;
+
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={position} renderOrder={-1}>
+      <planeGeometry args={scale} />
+      <meshBasicMaterial
+        map={map}
+        transparent
+        opacity={opacity}
+        depthWrite={false}
+        toneMapped={false}
+      />
+    </mesh>
+  );
+}
+
+function GroundShadows({ mobile }: { mobile: boolean }) {
+  const y = FLOOR_Y + 0.003;
+
+  if (mobile) {
+    return (
+      <>
+        <FakeShadow position={[0, y, 3]} scale={[3.2, 1.1]} opacity={0.48} />
+        <FakeShadow position={[-3.4, y, -9]} scale={[1.1, 0.75]} opacity={0.32} />
+        <FakeShadow position={[1.55, y, 0.3]} scale={[0.85, 0.6]} opacity={0.28} />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <FakeShadow position={[0, y, 4]} scale={[3.6, 1.2]} opacity={0.5} />
+      <FakeShadow position={[-3.6, y, 0.55]} scale={[1.15, 0.8]} opacity={0.36} />
+      <FakeShadow position={[3.6, y, 1.3]} scale={[1.15, 0.8]} opacity={0.36} />
+      <FakeShadow position={[-2.0, y, 0.5]} scale={[0.75, 0.55]} opacity={0.22} />
+      <FakeShadow position={[3.5, y, -0.9]} scale={[0.75, 0.55]} opacity={0.22} />
+    </>
+  );
+}
+
 // ─── Lighting ─────────────────────────────────────────────────────────────────
 // No gold/yellow at all — pure red + white palette
 function SceneLighting({ mobile }: { mobile: boolean }) {
   return (
     <>
-      <ambientLight intensity={0.65} color="#ffffff" />
+      <ambientLight intensity={0.72} color="#ffffff" />
       <hemisphereLight
         args={
           [
@@ -353,8 +424,6 @@ function SceneLighting({ mobile }: { mobile: boolean }) {
         position={[2, 6, 5]}
         intensity={2.4}
         color="#ffffff"
-        castShadow={!mobile}
-        shadow-mapSize={mobile ? undefined : [1024, 1024]}
       />
       {/* Red rim left */}
       <pointLight
@@ -384,7 +453,6 @@ function SceneLighting({ mobile }: { mobile: boolean }) {
         penumbra={0.88}
         intensity={mobile ? 40 : 72}
         color="#dce8ff"
-        castShadow={!mobile}
       />
       {/* Dark back fill — prevents silhouette going fully black */}
       <pointLight
@@ -418,7 +486,6 @@ function GymFloor({ mobile }: { mobile: boolean }) {
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
         position={[0, FLOOR_Y - 0.002, 0]}
-        receiveShadow
       >
         <planeGeometry args={[30, 30]} />
         <meshStandardMaterial
@@ -429,16 +496,7 @@ function GymFloor({ mobile }: { mobile: boolean }) {
           roughness={0.68}
         />
       </mesh>
-      {!mobile && (
-        <ContactShadows
-          position={[0, FLOOR_Y + 0.001, 0]}
-          opacity={0.52}
-          scale={14}
-          blur={2.6}
-          far={5}
-          color="#000000"
-        />
-      )}
+      <GroundShadows mobile={mobile} />
     </>
   );
 }
@@ -466,8 +524,23 @@ function CameraRig({ mobile }: { mobile: boolean }) {
   return null;
 }
 
+// Pauses the demand render loop when the hero scrolls off-screen
+function VisibilityDriver({ active }: { active: boolean }) {
+  const invalidate = useThree((state) => state.invalidate);
+
+  useEffect(() => {
+    if (active) invalidate();
+  }, [active, invalidate]);
+
+  useFrame(() => {
+    if (active) invalidate();
+  });
+
+  return null;
+}
+
 // ─── Scene root ───────────────────────────────────────────────────────────────
-function SceneContent() {
+function SceneContent({ isVisible }: { isVisible: boolean }) {
   const reduced = usePrefersReducedMotion();
   const mobile = useIsMobile();
 
@@ -476,15 +549,16 @@ function SceneContent() {
       <color attach="background" args={[BG]} />
       {!mobile && <fog attach="fog" args={[BG, 18, 36]} />}
       <CameraRig mobile={mobile} />
+      <VisibilityDriver active={isVisible} />
       <SceneLighting mobile={mobile} />
       <GymFloor mobile={mobile} />
-      <GymEquipment reduced={reduced} mobile={mobile} />
+      <GymEquipment reduced={reduced} mobile={mobile} isVisible={isVisible} />
     </>
   );
 }
 
 // ─── Export ───────────────────────────────────────────────────────────────────
-export function HeroScene() {
+export function HeroScene({ isVisible = true }: { isVisible?: boolean }) {
   const [mounted, set] = useState(false);
   const mobile = useIsMobile();
 
@@ -498,8 +572,8 @@ export function HeroScene() {
 
   return (
     <Canvas
-      shadows={!mobile}
-      dpr={mobile ? [1, 1.25] : [1, 1.75]}
+      frameloop="demand"
+      dpr={[1, 1.25]}
       gl={{
         antialias: !mobile,
         alpha: false,
@@ -510,7 +584,7 @@ export function HeroScene() {
       className="h-full w-full touch-none select-none"
       aria-hidden
     >
-      <SceneContent />
+      <SceneContent isVisible={isVisible} />
     </Canvas>
   );
 }

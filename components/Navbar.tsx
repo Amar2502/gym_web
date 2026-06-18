@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { getWhatsAppUrl, petersGym } from "@/content/peters-gym";
 import { IconClose, IconMenu } from "./Icons";
-import { LogoMark } from "./ui";
 
 const { site, nav } = petersGym;
 const whatsappUrl = getWhatsAppUrl();
@@ -35,7 +34,6 @@ export function Navbar() {
           aria-label="Main navigation"
         >
           <a href="#" className="flex items-center gap-3">
-            <LogoMark />
             <div className="leading-none">
               <span className="font-display text-2xl tracking-wider">{site.displayName}</span>
               <span className="block text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">
